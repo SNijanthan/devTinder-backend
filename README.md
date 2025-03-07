@@ -2,17 +2,50 @@
 
 ## Tech Stack
 
-- Runtime: Node.js
-- Framework: Express.js
-- Database: MongoDB
+- Runtime: `Node.js`
+- Framework: `Express.js`
+- Database: `MongoDB`
 
 ## Dependencies
 
 ### Core Libraries:
 
-- Express – Web framework for Node.js
-- Mongoose – ODM for MongoDB
+- express → Web framework for Node.js
+- mongoose → ODM for MongoDB
+- jsonwebtoken (jwt) → Handles authentication
+- validator → For data validation on both DB level and API level
+- bcrypt → Hashes passwords
+- cors → To handle cross-origin requests
+- dotenv → To manage environment variables
+- cookie-parser → Parses cookies
 
 ### Development Dependencies:
 
-- Nodemon – Auto-restarting for development
+- nodemon → Auto-restarting for development
+
+## API Structures:
+
+### Auth Routers
+
+- `POST /signup` → Registers a new user
+- `POST /login` → User login
+- `POST /logout` → Logs out a user
+
+### Profile Routers
+
+- `GET /profile/view` → For viewing profile
+- `PATCH /profile/edit` → For editing profile
+- `PATCH /profile/password` → For changing password
+
+### connections Routers
+
+- `POST /request/send/interest/:userId` → Sends an interest request to a user
+- `POST /request/send/ignored/:userId` → Ignores a user
+- `GET /request/review/accepted/:requestId` → Accepts a received request
+- `GET /request/review/rejected/:requestId` → Rejects a received request
+
+### User Routers
+
+- `GET /user/connections` → Retrieves all accepted connections
+- `GET /user/requests/received` → Retrieves received connection requests
+- `GET /user/feed` → Retrieves all the users

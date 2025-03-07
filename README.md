@@ -35,7 +35,7 @@
 
 - `GET /profile/view` → For viewing profile
 - `PATCH /profile/edit` → For editing profile
-- `PATCH /profile/password` → For changing password
+- `PATCH /profile/forgot-password` → For changing password
 
 ### connections Router
 

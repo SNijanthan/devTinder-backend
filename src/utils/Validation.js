@@ -7,11 +7,11 @@ const validateSignUpData = (req) => {
     throw new Error("Fields cannot be empty");
   }
 
-  if (firstName.length < 2 || firstName.length > 30) {
+  if (firstName.length > 30) {
     throw new Error("First name should be between 2 to 30 letterts");
   }
 
-  if (lastName.length < 1 || lastName.length > 30) {
+  if (lastName.length > 30) {
     throw new Error("Last name should be between 1 to 30 letterts");
   }
 
@@ -28,4 +28,34 @@ const validateSignUpData = (req) => {
   }
 };
 
-module.exports = validateSignUpData;
+const validateEditProfileData = (req) => {
+  const ALLOWED_EDIT_FIELDS = [
+    "firstName",
+    "lastName",
+    "photoUrl",
+    "about",
+    "skills",
+    "gender",
+    "age",
+  ];
+
+  const requestFields = Object.keys(req.body);
+
+  if (requestFields.length === 0) {
+    return false;
+  }
+
+  return requestFields.every((k) => ALLOWED_EDIT_FIELDS.includes(k));
+};
+
+const validatePasswordData = (req) => {
+  const { password } = req.body;
+
+  return validator.isStrongPassword(password);
+};
+
+module.exports = {
+  validateSignUpData,
+  validateEditProfileData,
+  validatePasswordData,
+};

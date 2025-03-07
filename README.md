@@ -25,26 +25,26 @@
 
 ## API Structures:
 
-### Auth Routers
+### Auth Router
 
 - `POST /signup` → Registers a new user
 - `POST /login` → User login
 - `POST /logout` → Logs out a user
 
-### Profile Routers
+### Profile Router
 
 - `GET /profile/view` → For viewing profile
 - `PATCH /profile/edit` → For editing profile
 - `PATCH /profile/password` → For changing password
 
-### connections Routers
+### connections Router
 
 - `POST /request/send/interest/:userId` → Sends an interest request to a user
 - `POST /request/send/ignored/:userId` → Ignores a user
 - `GET /request/review/accepted/:requestId` → Accepts a received request
 - `GET /request/review/rejected/:requestId` → Rejects a received request
 
-### User Routers
+### User Router
 
 - `GET /user/connections` → Retrieves all accepted connections
 - `GET /user/requests/received` → Retrieves received connection requests

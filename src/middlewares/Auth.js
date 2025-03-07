@@ -1,19 +1,17 @@
 const jwt = require("jsonwebtoken");
-const Users = require("../models/Users");
+const Users = require("../models/Users.js");
 
 const auth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
 
     if (!token) {
-      throw new Error("Session expired, Please login");
+      return res.status(401).json({ error: "Session expired, Please login" });
     }
 
-    const isTokenValid = await jwt.verify(token, "DEV@TINDER@123");
+    const decoded = jwt.verify(token, "DEVTINDER@123");
 
-    const { _id } = isTokenValid;
-
-    const user = await Users.findById(_id);
+    const user = await Users.findById(decoded._id);
 
     if (!user) {
       throw new Error("User not exist");
@@ -27,4 +25,4 @@ const auth = async (req, res, next) => {
   }
 };
 
-module.exports = { auth };
+module.exports = auth;

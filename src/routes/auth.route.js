@@ -1,10 +1,11 @@
 const express = require("express");
 const authRouter = express.Router();
-const { validateSignUpData } = require("../utils/Validation.js");
-const Users = require("../models/Users.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { validateSignUpData } = require("../utils/Validation.js");
+const Users = require("../models/Users.js");
 const auth = require("../middlewares/Auth.js");
+const hashPassword = require("../utils/hashPassword.js");
 
 // ! Registers a new user
 
@@ -14,7 +15,7 @@ authRouter.post("/signup", async (req, res) => {
 
     validateSignUpData(req);
 
-    const { firstName, lastName, emailId, password } = req.body;
+    const { firstName, lastName, emailId, password, age } = req.body;
 
     // * Checking if the email address already present in DB
 
@@ -24,9 +25,9 @@ authRouter.post("/signup", async (req, res) => {
       throw new Error("Email already exists");
     }
 
-    // * After validating data, hash password has been created
+    // * After validating data, hash password has been created using helper function => hashPassword
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     // * Creating new instance to add into DB
 
@@ -34,7 +35,8 @@ authRouter.post("/signup", async (req, res) => {
       firstName,
       lastName,
       emailId,
-      password: hashPassword,
+      password: hashedPassword,
+      age,
     });
 
     await user.save();

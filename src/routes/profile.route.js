@@ -2,7 +2,7 @@ const express = require("express");
 const profileRouter = express.Router();
 const Users = require("../models/Users");
 const auth = require("../middlewares/Auth");
-const bcrypt = require("bcrypt");
+const hashPassword = require("../utils/hashPassword");
 const {
   validateEditProfileData,
   validatePasswordData,
@@ -77,13 +77,13 @@ profileRouter.patch("/profile/forgot-password", auth, async (req, res) => {
 
     // * hashing the password
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashedPassowrd = await hashPassword(password);
 
     //  * Updating the new password into DB
 
     const user = await Users.findByIdAndUpdate(
       _id,
-      { password: hashPassword },
+      { password: hashedPassowrd },
       { runValidators: true, new: true }
     );
 

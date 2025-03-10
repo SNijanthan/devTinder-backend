@@ -55,7 +55,7 @@ profileRouter.patch("/profile/edit", auth, async (req, res) => {
   }
 });
 
-//  ! For changing passowrd
+//  ! For forgot passowrd
 
 profileRouter.patch("/profile/forgot-password", auth, async (req, res) => {
   try {
@@ -75,7 +75,7 @@ profileRouter.patch("/profile/forgot-password", auth, async (req, res) => {
       return res.status(400).json({ error: "Password is required" });
     }
 
-    // * hashing the password
+    // * hashing the password using helper function => utils -> hashPassword
 
     const hashedPassowrd = await hashPassword(password);
 

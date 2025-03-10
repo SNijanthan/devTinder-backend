@@ -13,7 +13,7 @@ const connectionRequestSchema = new mongoose.Schema(
     connectionStatus: {
       type: String,
       enum: {
-        values: ["accepted", "rejected", "interested", "ignore"],
+        values: ["accepted", "rejected", "interested", "ignored"],
         message: "Invalid connection status: {VALUE}",
       },
       required: true,
@@ -21,6 +21,21 @@ const connectionRequestSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// * Compound indexing
+
+connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
+
+// ! Using "pre" middleware
+// * Checking if both fromUserId and toUserId is same
+
+connectionRequestSchema.pre("save", function (next) {
+  if (this.fromUserId.equals(this.toUserId)) {
+    throw new Error("Cannot send connection request to yourself !!!");
+  }
+
+  next();
+});
 
 const ConnectionRequest = mongoose.model(
   "ConnectionRequest",

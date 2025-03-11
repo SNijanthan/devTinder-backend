@@ -39,10 +39,12 @@
 
 ### connections Router
 
-- `POST /request/send/interest/:userId` → Sends an interest request to a user
-- `POST /request/send/ignored/:userId` → Ignores a user
-- `GET /request/review/accepted/:requestId` → Accepts a received request
-- `GET /request/review/rejected/:requestId` → Rejects a received request
+- `POST /request/send/:status/:userId` → Sends an interest request to a user or Ignores a user
+
+- `POST /request/review/:status/:requestId` → Accept or reject a received request
+
+- `POST /request/review/accepted/:requestId` → Accepts a received request
+- `POST /request/review/rejected/:requestId` → Rejects a received request
 
 ### User Router
 

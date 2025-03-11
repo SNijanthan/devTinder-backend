@@ -62,4 +62,65 @@ requestRouter.post(
   }
 );
 
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  auth,
+  async (req, res) => {
+    try {
+      const loggedInUser = req.user;
+
+      const { status, requestId } = req.params;
+
+      const allowedStatus = ["accepted", "rejected"];
+
+      if (!allowedStatus.includes(status)) {
+        throw new Error(`Incorrect status: ${status}`);
+      }
+
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        connectionStatus: "interested",
+        toUserId: loggedInUser._id,
+      });
+
+      if (!connectionRequest) {
+        throw new Error("COnnection request not exist..!");
+      }
+
+      connectionRequest.connectionStatus = status;
+
+      const data = await connectionRequest.save();
+
+      res.status(200).json({ message: "Request eccepted successfully", data });
+    } catch (error) {
+      res.status(400).send(`ERROR: ${error.message}`);
+    }
+  }
+);
+
+requestRouter.get("/request/view", auth, async (req, res) => {
+  try {
+    const connectionRequest = await ConnectionRequest.find({
+      toUserId: req.user._id,
+    });
+
+    if (!connectionRequest) {
+      return res.status(400).send("No requests exist");
+    }
+
+    res
+      .status(200)
+      .json({ message: "Data retrived successfully", connectionRequest });
+  } catch (error) {
+    res.status(400).send(`ERROR: ${error.message}`);
+  }
+});
+
 module.exports = requestRouter;
+
+/*
+! review request corner cases
+1. loggedInUser ID should be equal to toUserId
+2. status only should be "interested"
+3. requestedId should be valid
+*/

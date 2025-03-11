@@ -98,24 +98,6 @@ requestRouter.post(
   }
 );
 
-requestRouter.get("/request/view", auth, async (req, res) => {
-  try {
-    const connectionRequest = await ConnectionRequest.find({
-      toUserId: req.user._id,
-    });
-
-    if (!connectionRequest) {
-      return res.status(400).send("No requests exist");
-    }
-
-    res
-      .status(200)
-      .json({ message: "Data retrived successfully", connectionRequest });
-  } catch (error) {
-    res.status(400).send(`ERROR: ${error.message}`);
-  }
-});
-
 module.exports = requestRouter;
 
 /*

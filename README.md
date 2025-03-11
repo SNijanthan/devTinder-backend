@@ -43,11 +43,8 @@
 
 - `POST /request/review/:status/:requestId` → Accept or reject a received request
 
-- `POST /request/review/accepted/:requestId` → Accepts a received request
-- `POST /request/review/rejected/:requestId` → Rejects a received request
-
 ### User Router
 
-- `GET /user/connections` → Retrieves all accepted connections
+- `GET /user/review/connections` → Retrieves all accepted connections
 - `GET /user/requests/received` → Retrieves received connection requests
 - `GET /user/feed` → Retrieves all the users

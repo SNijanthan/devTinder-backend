@@ -45,6 +45,6 @@
 
 ### User Router
 
-- `GET /user/review/connections` → Retrieves all accepted connections
-- `GET /user/requests/received` → Retrieves received connection requests
+- `GET /user/review/connections` → Retrieves received connection requests
+- `GET /user/connections` → Retrieves all accepted connections
 - `GET /user/feed` → Retrieves all the users

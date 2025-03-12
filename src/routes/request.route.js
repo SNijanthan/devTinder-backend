@@ -5,6 +5,8 @@ const ConnectionRequest = require("../models/ConnectionRequest.js");
 
 const requestRouter = express.Router();
 
+const USER_SAFE_DATA = "firstName lastName age gender about photoUrl skills";
+
 requestRouter.post(
   "/request/send/:status/:toUserId",
   auth,
@@ -81,17 +83,24 @@ requestRouter.post(
         _id: requestId,
         connectionStatus: "interested",
         toUserId: loggedInUser._id,
-      });
+      }).populate("fromUserId", USER_SAFE_DATA);
 
       if (!connectionRequest) {
-        throw new Error("COnnection request not exist..!");
+        throw new Error("Connection request not exist..!");
       }
 
       connectionRequest.connectionStatus = status;
 
       const data = await connectionRequest.save();
 
-      res.status(200).json({ message: "Request eccepted successfully", data });
+      res.status(200).json({
+        message: `Request ${
+          connectionRequest.connectionStatus === "accepted"
+            ? "accepted"
+            : "rejected"
+        } successfully`,
+        data,
+      });
     } catch (error) {
       res.status(400).send(`ERROR: ${error.message}`);
     }

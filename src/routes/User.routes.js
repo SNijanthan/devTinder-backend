@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 const auth = require("../middlewares/Auth");
 const ConnectionRequest = require("../models/ConnectionRequest");
+const Users = require("../models/Users");
 
 const USER_SAFE_DATA = "firstName lastName age gender about photoUrl skills";
 
@@ -47,6 +48,8 @@ userRouter.get("/user/connections", auth, async (req, res) => {
       throw new Error("No matching connections..!");
     }
 
+    // * We cannot compare mongoID's like strings() so we should use equals()
+
     const data = connectionRequests.map((row) => {
       if (row.fromUserId._id.equals(loggedInUser._id)) {
         return row.toUserId;
@@ -60,8 +63,36 @@ userRouter.get("/user/connections", auth, async (req, res) => {
   }
 });
 
-// ! Review all the users from DB
+// ! Retrieve all the users from DB
 
-userRouter.get("/user/feed", auth, async (req, res) => {});
+userRouter.get("/user/feed", auth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId toUserId");
+
+    const hideusersFromFeed = new Set();
+
+    connectionRequests.forEach((req) => {
+      hideusersFromFeed.add(req.fromUserId.toString());
+      hideusersFromFeed.add(req.toUserId.toString());
+    });
+
+    const users = await Users.find({
+      $and: [
+        {
+          _id: { $nin: Array.from(hideusersFromFeed) },
+        },
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    });
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(400).send(`ERROR: ${error.message}`);
+  }
+});
 
 module.exports = userRouter;

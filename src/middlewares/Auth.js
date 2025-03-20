@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const Users = require("../models/Users.js");
 
+require("dotenv").config();
+
 const auth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
@@ -9,7 +11,7 @@ const auth = async (req, res, next) => {
       return res.status(401).json({ error: "Session expired, Please login" });
     }
 
-    const decoded = jwt.verify(token, "DEVTINDER@123");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await Users.findById(decoded._id);
 

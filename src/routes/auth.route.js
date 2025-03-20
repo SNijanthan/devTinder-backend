@@ -7,6 +7,8 @@ const Users = require("../models/Users.js");
 const auth = require("../middlewares/Auth.js");
 const hashPassword = require("../utils/hashPassword.js");
 
+require("dotenv").config();
+
 // ! Registers a new user
 
 authRouter.post("/signup", async (req, res) => {
@@ -74,9 +76,13 @@ authRouter.post("/login", async (req, res) => {
     // * Generate JWT Token
 
     if (isPasswordValid) {
-      const token = jwt.sign({ _id: existingUser._id }, "DEVTINDER@123", {
-        expiresIn: "1d",
-      });
+      const token = jwt.sign(
+        { _id: existingUser._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
 
       res.cookie("token", token, { httpOnly: true });
       res.status(200).send("Login successfull");

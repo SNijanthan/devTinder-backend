@@ -42,11 +42,12 @@ const userSchema = new mongoose.Schema(
     },
     age: {
       type: Number,
-      min: 16,
       required: true,
+      min: 16,
     },
     gender: {
       type: String,
+      required: true,
       enum: {
         values: ["Male", "Female", "Others"],
         message: "{VALUE} is not supported",
@@ -54,6 +55,7 @@ const userSchema = new mongoose.Schema(
     },
     photoUrl: {
       type: String,
+      required: true,
       default:
         "https://wallpapers.com/images/hd/netflix-profile-pictures-1000-x-1000-88wkdmjrorckekha.jpg",
       validate(value) {
@@ -64,6 +66,7 @@ const userSchema = new mongoose.Schema(
     },
     about: {
       type: String,
+      required: true,
       default:
         "This is default about section, Please change it as per your wish",
       minlength: 15,
@@ -71,6 +74,7 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
+      required: true,
     },
   },
   { timestamps: true }

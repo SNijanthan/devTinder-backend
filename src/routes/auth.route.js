@@ -17,7 +17,17 @@ authRouter.post("/signup", async (req, res) => {
 
     validateSignUpData(req);
 
-    const { firstName, lastName, emailId, password, age } = req.body;
+    const {
+      firstName,
+      lastName,
+      emailId,
+      password,
+      age,
+      gender,
+      photoUrl,
+      about,
+      skills,
+    } = req.body;
 
     // * Checking if the email address already present in DB
 
@@ -39,6 +49,10 @@ authRouter.post("/signup", async (req, res) => {
       emailId,
       password: hashedPassword,
       age,
+      gender,
+      photoUrl,
+      about,
+      skills,
     });
 
     await user.save();

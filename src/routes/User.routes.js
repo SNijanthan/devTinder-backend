@@ -45,7 +45,9 @@ userRouter.get("/user/connections", auth, async (req, res) => {
       .populate("toUserId", USER_SAFE_DATA);
 
     if (connectionRequests.length === 0) {
-      throw new Error("No matching connections..!");
+      return res
+        .status(200)
+        .json({ message: "No connections found.", data: [] });
     }
 
     // * We cannot compare mongoID's like strings() so we should use equals()

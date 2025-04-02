@@ -54,6 +54,11 @@ authRouter.post("/signup", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
+
+    if (!emailId || !password) {
+      throw new Error("Fields cannot be empty");
+    }
+
     // * Check if user exists
 
     const existingUser = await Users.findOne({ emailId });
@@ -85,7 +90,9 @@ authRouter.post("/login", async (req, res) => {
       );
 
       res.cookie("token", token, { httpOnly: true });
-      res.status(200).send("Login successfull");
+      res
+        .status(200)
+        .json({ message: "Login successfull", user: existingUser });
     }
   } catch (error) {
     res.status(400).send(`Error: ${error.message}`);
@@ -101,7 +108,9 @@ authRouter.post("/logout", auth, async (req, res) => {
     res
       .cookie("token", null, { expires: new Date(0), httpOnly: true })
       .status(200)
-      .send(`User ${req.user.firstName} ${req.user.lastName} logged out`);
+      .json({
+        message: `User ${req.user.firstName} ${req.user.lastName} logged out`,
+      });
   } catch (error) {
     res.status(400).send(`Error: ${error.message}`);
   }

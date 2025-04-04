@@ -4,6 +4,8 @@ const { connectToDatabase } = require("./config/Database");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+require("dotenv").config();
+
 app.use(
   cors({
     origin: "http://localhost:5173", // Whitelisting domain name

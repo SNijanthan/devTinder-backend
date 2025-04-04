@@ -53,17 +53,17 @@ profileRouter.patch("/profile/edit", auth, async (req, res) => {
 
 //  ! For forgot passowrd
 
-profileRouter.patch("/profile/forgot-password", auth, async (req, res) => {
+profileRouter.patch("/profile/forgot-password", async (req, res) => {
   try {
     // * Checking whether the password is strong or not
-
-    if (!validatePasswordData(req)) {
-      throw new Error("Please enter strong password ");
-    }
 
     const { password } = req.body;
 
     const { _id } = req.user;
+
+    const userId = await Users.findOne({ _id });
+
+    console.log(userId);
 
     //  * Password field cannot be empty
 
